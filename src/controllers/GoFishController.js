@@ -8,6 +8,8 @@ class GoFishController {
     view.draw(this.container())
   }
 
+  // TODO: Game View Render
+
   startGame(name) {
     const player = new Player(name)
     const game = new Game([player])
