@@ -9,10 +9,17 @@ class GameView {
       <h2>Players</h2>
       <ul>
         ${this.game.players.map(player => 
-          `<li className="player-name">
+          `<li class="player-name">
             ${player.name}
-            <ul className="player-hand">
+            <br><span>Hand:</span>
+            <ul class="player-hand">
               ${player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
+            </ul>
+            <span>Books:</span>
+            <ul class="player-books">
+              ${player.books.map(book => 
+                book.cards.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
+              ).join('')}
             </ul>
           </li>`).join('')}
       </ul>
