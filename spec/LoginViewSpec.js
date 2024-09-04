@@ -1,21 +1,21 @@
-describe('LoginView', function () {
+describe('LoginView', () => {
   let container
   let params
 
-  beforeEach(function() {
+  beforeEach(() => {
     container = document.createElement('div')
     container.id = 'main'
     document.body.appendChild(container)
     params = {}
   })
 
-  afterEach(function() {
+  afterEach(() => {
     document.body.removeChild(container)
   })
 
 
-  it('should show a form', function () {
-    const loginView = new LoginView(() => {})
+  it('should show a form', () => {
+    const loginView = new LoginView(() => { })
     loginView.draw(container)
 
     const form = container.querySelector('form')
@@ -34,7 +34,7 @@ describe('LoginView', function () {
     expect(button).not.toBeNull()
   })
 
-  it ('should store the name and number of opponents when the form is submitted', function () {
+  it('should store the name and number of opponents when the form is submitted', () => {
     const callBackFunction = (name, opponentCount) => {
       params = { name, opponentCount }
     }
@@ -50,45 +50,50 @@ describe('LoginView', function () {
 
     submitButton.click();
 
-    expect(params).toEqual({name: 'gabriel', opponentCount: '2'})
+    expect(params).toEqual({ name: 'gabriel', opponentCount: '2' })
   })
 
-  it ('should ensure that the name is not empty', function () {
-    const callBackFunction = (name, opponentCount) => {
-      params = { name, opponentCount }
-    }
+  describe('validations', () => {
+    let submitButton
+    let nameInput
+    let numberOfOpponentsInput
 
-    const loginView = new LoginView(callBackFunction)
-    loginView.draw(container)
+    beforeEach(() => {
+      const callBackFunction = (name, opponentCount) => {
+        params = { name, opponentCount }
+      }
 
-    const form = container.querySelector('form')
-    const submitButton = form.querySelector('input[type="submit"]')
-    form.querySelector('.name').value = ''
-    form.querySelector('.number-of-opponents').value = 2
-    expect(params).toEqual({})
+      const loginView = new LoginView(callBackFunction)
+      loginView.draw(container)
 
-    submitButton.click();
+      const form = container.querySelector('form')
+      submitButton = form.querySelector('input[type="submit"]')
+      nameInput = form.querySelector('.name')
+      numberOfOpponentsInput = form.querySelector('.number-of-opponents')
+    })
+    
+    
 
-    expect(params).toEqual({})
-  })
+    it('should ensure that the name is not empty', () => {
+      nameInput.value = ''
+      numberOfOpponentsInput.value = 2
+      expect(params).toEqual({})
 
-  it ('should ensure that the number of opponents is within 1-8', function () {
-    const callBackFunction = (name, opponentCount) => {
-      params = { name, opponentCount }
-    }
+      submitButton.click();
 
-    const loginView = new LoginView(callBackFunction)
-    loginView.draw(container)
+      expect(params).toEqual({})
+    })
 
-    const form = container.querySelector('form')
-    const submitButton = form.querySelector('input[type="submit"]')
-    form.querySelector('.name').value = 'gabriel'
-    form.querySelector('.number-of-opponents').value = 0
-    expect(params).toEqual({})
+    it('should ensure that the number of opponents is within 1-8', () => {
+      nameInput.value = 'gabriel'
+      numberOfOpponentsInput.value = 0
+      expect(params).toEqual({})
 
-    submitButton.click();
+      submitButton.click();
 
-    expect(params).toEqual({})
+      expect(params).toEqual({})
+    })
+
   })
 
 })

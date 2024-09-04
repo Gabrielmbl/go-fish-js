@@ -8,11 +8,10 @@ class GoFishController {
     view.draw(this.container())
   }
 
-  // TODO: Game View Render
-
-  startGame(name) {
+  startGame(name, opponentCount) {
     const player = new Player(name)
-    const game = new Game([player])
+    const bots = Array.from({ length: opponentCount }, (_, i) => new Bot(`Bot ${i + 1}`))
+    const game = new Game([player, ...bots])
     const view = new GameView(game)
     view.draw(this.container())
   }
