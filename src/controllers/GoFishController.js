@@ -10,7 +10,7 @@ class GoFishController {
 
   startGame(name, opponentCount) {
     const player = new Player(name)
-    player.hand = [new Card('2', 'Hearts'), new Card('3', 'Hearts')]
+    player.hand = [new Card('3', 'Hearts')]
     player.books.push(new Book(new Card('2', 'Hearts'), new Card('2', 'Clubs'), new Card('2', 'Diamonds'), new Card('2', 'Spades')))
     const bots = Array.from({ length: opponentCount }, (_, i) => new Bot(`Bot ${i + 1}`))
     const game = new Game([player, ...bots])

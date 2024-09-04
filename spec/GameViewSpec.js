@@ -2,6 +2,7 @@ describe('GameView', () => {
   let container
   let game
   let player
+  let bot
   let book
   let view
 
@@ -13,7 +14,9 @@ describe('GameView', () => {
     player.hand = [new Card('3', 'Hearts')]
     book = new Book(new Card('2', 'Hearts'), new Card('2', 'Clubs'), new Card('2', 'Diamonds'), new Card('2', 'Spades'))
     player.books.push(book)
-    game = new Game([player])
+    bot = new Bot('lucas')
+    bot.hand = [new Card('A', 'Hearts')]
+    game = new Game([player, bot])
     view = new GameView(game)
 
     jasmine.addMatchers({
@@ -42,7 +45,7 @@ describe('GameView', () => {
     view.draw(container)
 
     expect(container.innerHTML).toMatchHTMLContent(/gabriel/)
-    expect(container.innerHTML).not.toMatchHTMLContent(/lucas/)
+    expect(container.innerHTML).not.toMatchHTMLContent(/UnexistantPlayer/)
     expect(container.innerHTML).toMatchHTMLContent(/3 of Hearts/)
     expect(container.innerHTML).toMatchHTMLContent(/2 of Hearts/)
     expect(container.innerHTML).toMatchHTMLContent(/2 of Clubs/)
@@ -56,5 +59,17 @@ describe('GameView', () => {
 
     expect(container.innerHTML).toMatchHTMLContent(/gabriel/)
     expect(container.innerHTML).toMatchHTMLContent(/lucas/)
+  })
+
+  it ('should render the game view without displaying the bot hand', () => {
+    view.draw(container)
+
+    expect(container.innerHTML).toMatchHTMLContent(/gabriel/)
+    expect(container.innerHTML).toMatchHTMLContent(/3 of Hearts/)
+    expect(container.innerHTML).toMatchHTMLContent(/2 of Hearts/)
+    expect(container.innerHTML).toMatchHTMLContent(/2 of Clubs/)
+    expect(container.innerHTML).toMatchHTMLContent(/2 of Diamonds/)
+    expect(container.innerHTML).toMatchHTMLContent(/2 of Spades/)
+    expect(container.innerHTML).toMatchHTMLContent(/\[Hand is hidden\]/)
   })
 })

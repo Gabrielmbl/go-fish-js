@@ -13,7 +13,10 @@ class GameView {
             ${player.name}
             <br><span>Hand:</span>
             <ul class="player-hand">
-              ${player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
+              ${player instanceof Bot ? 
+                '<li>[Hand is hidden]</li>' : 
+                player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
+              }
             </ul>
             <span>Books:</span>
             <ul class="player-books">
