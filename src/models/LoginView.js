@@ -2,19 +2,18 @@ class LoginView {
   constructor(onSubmitCallback) {
     this.onSubmitCallback = onSubmitCallback
   }
-  // TODO: Validate form (HTML5) -> Cant be empty, valid opponent counts
 
   draw(container) {
     container.innerHTML = `
-      <form id="login-form">
+      <form class="login-form">
         <label for="name">Name:</label>
         <input type="text" class="name" name="name" required>
         <label for="number-of-opponents">Number of Players:</label>
-        <input type="number" class="number-of-opponents" name="number-of-opponents" required>
+        <input type="number" class="number-of-opponents" name="number-of-opponents" min="1" max="8" required>
         <input type="submit" value="Start Game">
       </form>
     `
-    const form = container.querySelector('#login-form')
+    const form = container.querySelector('.login-form')
     form.addEventListener('submit', function(event) {
       event.preventDefault()
 
