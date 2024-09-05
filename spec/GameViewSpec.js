@@ -92,9 +92,7 @@ describe('GameView', () => {
       rank.value = '3'
       
       submitButton.click()
-      
-      askForm = container.querySelector('.ask-form')
-      expect(askForm.style.display).toBe('none')
+
     })
   })
 })

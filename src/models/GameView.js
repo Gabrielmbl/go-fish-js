@@ -4,10 +4,11 @@ class GameView {
   }
   
   _renderAskForm() {
+    if (this.game.currentPlayer !== this.game.players[0]) return ''
+
     const uniqueRanks = [...new Set(this.game.players[0].hand.map(card => card.rank))]
-    const displayType = this.game.currentPlayer === this.game.players[0] ? 'block' : 'none'
     return `
-      <form class="ask-form" style="display:${displayType}">
+      <form class="ask-form">
         <label for="rank">Ask for rank:</label>
         <select id="rank">
           ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
@@ -84,7 +85,13 @@ class GameView {
       </ul>
     `
     const askForm = container.querySelector('.ask-form')
-    askForm.addEventListener('submit', function(event) {
+    if (askForm) {
+      this.addFormEventListener(askForm, container)
+    }
+  }
+
+  addFormEventListener(askForm, container) {
+    askForm.addEventListener('submit', function (event) {
       event.preventDefault()
       const rank = askForm.querySelector('#rank').value
       const opponent = askForm.querySelector('#opponent').value
@@ -92,5 +99,4 @@ class GameView {
       this.draw(container)
     }.bind(this))
   }
-
 }
