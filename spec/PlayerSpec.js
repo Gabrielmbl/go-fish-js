@@ -1,58 +1,35 @@
-// describe('Player', function() {
-//   let player;
-//   let song;
+describe ('Player', () => {
+  let player
 
-//   beforeEach(function() {
-//     player = new Player();
-//     song = new Song();
-//   });
+  beforeEach(() => {
+    player = new Player('Gabriel')
+  })
 
-//   it('should be able to play a Song', function() {
-//     player.play(song);
-//     expect(player.currentlyPlayingSong).toEqual(song);
+  describe('handHasRanks', () => {
+    it ('should return true if the player has the rank', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      expect(player.handHasRanks('3')).toEqual(true)
+    })
 
-//     // demonstrates use of custom matcher
-//     expect(player).toBePlaying(song);
-//   });
+    it ('should return false if the player does not have the rank', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      expect(player.handHasRanks('4')).toEqual(false)
+    })
+  })
 
-//   describe('when song has been paused', function() {
-//     beforeEach(function() {
-//       player.play(song);
-//       player.pause();
-//     });
+  describe('addToHand', () => {
+    it ('should add cards to the player hand', () => {
+      player.addToHand([new Card('3', 'Hearts'), new Card('3', 'Clubs')])
+      expect(player.hand.length).toEqual(2)
+    })
+  })
 
-//     it('should indicate that the song is currently paused', function() {
-//       expect(player.isPlaying).toBeFalsy();
-
-//       // demonstrates use of 'not' with a custom matcher
-//       expect(player).not.toBePlaying(song);
-//     });
-
-//     it('should be possible to resume', function() {
-//       player.resume();
-//       expect(player.isPlaying).toBeTruthy();
-//       expect(player.currentlyPlayingSong).toEqual(song);
-//     });
-//   });
-
-//   // demonstrates use of spies to intercept and test method calls
-//   it('tells the current song if the user has made it a favorite', function() {
-//     spyOn(song, 'persistFavoriteStatus');
-
-//     player.play(song);
-//     player.makeFavorite();
-
-//     expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);
-//   });
-
-//   //demonstrates use of expected exceptions
-//   describe('#resume', function() {
-//     it('should throw an exception if song is already playing', function() {
-//       player.play(song);
-
-//       expect(function() {
-//         player.resume();
-//       }).toThrowError('song is already playing');
-//     });
-//   });
-// });
+  describe ('removeByRank', () => {
+    it ('should remove cards from the player hand by rank', () => {
+      player.hand = [new Card('3', 'Hearts'), new Card('3', 'Clubs')]
+      expect(player.hand.length).toEqual(2)
+      player.removeByRank('3')
+      expect(player.hand.length).toEqual(0)
+    })
+  })
+})

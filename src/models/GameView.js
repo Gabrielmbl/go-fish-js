@@ -11,7 +11,10 @@ class GameView {
       <form class="ask-form">
       <label for="rank">Ask for rank:</label>
       <select id="rank">
-        ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
+      ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
+      </select>
+      <select id="opponent">
+      ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
       </select>
       <button type="submit">Ask</button>
       </form>
@@ -30,7 +33,7 @@ class GameView {
             <br><span>Hand:</span>
             <ul class="player-hand">
               ${player instanceof Bot ? 
-                '<li>[Hand is hidden]</li>' : 
+                player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('') : 
                 player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
               }
             </ul>
@@ -47,7 +50,8 @@ class GameView {
     askForm.addEventListener('submit', function(event) {
       event.preventDefault()
       const rank = askForm.querySelector('#rank').value
-      this.game.playRound(this.game.players[0], this.game.players[1], rank)
+      const opponent = askForm.querySelector('#opponent').value
+      this.game.playRound(this.game.players[0], opponent, rank)
       this.draw(container)
     }.bind(this))
   }

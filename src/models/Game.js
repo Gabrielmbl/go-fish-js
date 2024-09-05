@@ -16,12 +16,17 @@ class Game {
   }
 
   playRound(player, opponent, rank) {
-    const cards = opponent.hand.filter(card => card.rank === rank)
-    if (cards.length > 0) {
-      player.hand = player.hand.concat(cards)
-      opponent.hand = opponent.hand.filter(card => card.rank !== rank)
+    opponent = this.players.find(player => player.name === opponent)
+    if (opponent.handHasRanks(rank)) {
+      this._moveCardsFromOpponentToPlayer(player, opponent, rank)
     } else {
       player.hand.push(this.deck.cards.pop())
     }
+  }
+
+  _moveCardsFromOpponentToPlayer(player, opponent, rank) {
+    const cards = opponent.hand.filter(card => card.rank === rank)
+    player.addToHand(cards)
+    opponent.removeByRank(rank)
   }
 }
