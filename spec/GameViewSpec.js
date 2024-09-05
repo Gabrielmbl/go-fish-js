@@ -95,4 +95,19 @@ describe('GameView', () => {
 
     })
   })
+
+  describe('Continue button', () => {
+    it ('should make bot take turn if user presses on the continue button', () => {
+      game.deck.cards = [new Card('4', 'Hearts')]
+      game.players[0].hand = [new Card('3', 'Hearts')]
+      game.players[1].hand = [new Card('A', 'Hearts')]
+      game.currentPlayer = game.players[1]
+
+      view.draw(container)
+      let continueButton = container.querySelector('.continue-button')
+      continueButton.click()
+
+      expect(game.players[1].hand.length).toEqual(2)
+    })
+  })
 })

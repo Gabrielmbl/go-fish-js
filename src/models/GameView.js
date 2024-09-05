@@ -4,7 +4,7 @@ class GameView {
   }
   
   _renderAskForm() {
-    if (this.game.currentPlayer !== this.game.players[0]) return ''
+    if (!this.game.isItHumanPlayerTurn()) return ''
 
     const uniqueRanks = [...new Set(this.game.players[0].hand.map(card => card.rank))]
     return `
@@ -16,7 +16,16 @@ class GameView {
         <select id="opponent">
           ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
         </select>
-        <button type="submit">Ask</button>
+        <button class="btn" type="submit">Ask</button>
+      </form>
+    `
+  }
+
+  _renderContinueButton() {
+    if (this.game.isItHumanPlayerTurn()) return ''
+    return `
+      <form class="continue-form">
+        <button class="btn continue-button" type="submit">Continue</button>
       </form>
     `
   }
@@ -79,14 +88,23 @@ class GameView {
       <h1>Go Fish</h1>
       <h2>Players</h2>
       ${this._renderAskForm()}
+      ${this._renderContinueButton()}
       <ul>
         ${this._renderPlayerView()}
         ${this._renderBotView()}
       </ul>
     `
+    this.addEventListeners(container)
+  }
+
+  addEventListeners(container) {
     const askForm = container.querySelector('.ask-form')
+    const continueForm = container.querySelector('.continue-form')
     if (askForm) {
       this.addFormEventListener(askForm, container)
+    }
+    if (continueForm) {
+      this.addContinueEventListener(continueForm, container)
     }
   }
 
@@ -95,7 +113,15 @@ class GameView {
       event.preventDefault()
       const rank = askForm.querySelector('#rank').value
       const opponent = askForm.querySelector('#opponent').value
-      this.game.playRound(this.game.players[0], opponent, rank)
+      this.game.playRound(this.game.currentPlayer.name, opponent, rank)
+      this.draw(container)
+    }.bind(this))
+  }
+
+  addContinueEventListener(continueForm, container) {
+    continueForm.addEventListener('submit', function (event) {
+      event.preventDefault()
+      this.game.botTakeTurn()
       this.draw(container)
     }.bind(this))
   }

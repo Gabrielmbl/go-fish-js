@@ -7,6 +7,10 @@ class Game {
     this.currentPlayer = players[0]
   }
 
+  isItHumanPlayerTurn() {
+    return this.currentPlayer === this.players[0]
+  }
+
   deal() {
     this.deck.shuffle()
     this.players.forEach(player => {
@@ -17,12 +21,18 @@ class Game {
   }
 
   playRound(player, opponent, rank) {
-    opponent = this.players.find(player => player.name === opponent)
+    ({ player, opponent } = this.setPlayerAndOpponent(player, opponent))
     if (opponent.handHasRanks(rank)) {
       this.moveCardsFromOpponentToPlayer(player, opponent, rank)
     } else {
       this.handleGoFish(rank)
     }
+  }
+
+  setPlayerAndOpponent(player, opponent) {
+    player = this.players.find(p => p.name === player)
+    opponent = this.players.find(p => p.name === opponent)
+    return { player, opponent }
   }
 
   moveCardsFromOpponentToPlayer(player, opponent, rank) {
@@ -48,5 +58,12 @@ class Game {
     const card = this.deck.cards.pop()
     this.currentPlayer.addToHand(card)
     return card
+  }
+
+  botTakeTurn() {
+    const bot = this.currentPlayer
+    const opponent = bot.getRandomOpponent(this.players)
+    const rank = bot.getRandomRank()
+    this.playRound(bot.name, opponent.name, rank)
   }
 }
