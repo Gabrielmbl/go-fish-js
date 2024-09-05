@@ -3,23 +3,74 @@ class GameView {
     this.game = game
   }
   
-  // TODO: Create a player view and bot view
-
   _renderAskForm() {
     const uniqueRanks = [...new Set(this.game.players[0].hand.map(card => card.rank))]
     return `
       <form class="ask-form">
       <label for="rank">Ask for rank:</label>
       <select id="rank">
-      ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
+        ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
       </select>
       <select id="opponent">
-      ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
+        ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
       </select>
       <button type="submit">Ask</button>
       </form>
     `
   }
+
+  _renderPlayerView() {
+    const player = this.game.players.filter(player => !(player instanceof Bot))[0]
+    return `
+      <li class="player-name">
+        ${player.name}
+        <br><span>Hand:</span>
+        ${this._renderPlayerHand(player)}
+        <span>Books:</span>
+        <ul class="player-books">
+          ${this._renderPlayerBooks(player)}
+        </ul>
+      </li>
+    `
+  }
+
+  _renderBotView() {
+    const bots = this.game.players.filter(player => player instanceof Bot)
+    return `
+      ${bots.map(bot => `
+        <li class="player-name">
+          ${bot.name}
+          <br><span>Hand:</span>
+          ${this._renderPlayerHand(bot)}
+          <span>Books:</span>
+          <ul class="player-books">
+            ${this._renderPlayerBooks(bot)}
+          </ul>
+        </li>
+      `).join('')}
+    `
+  }
+
+  _renderPlayerHand(player) {
+    return `
+      <ul class="player-hand">
+        ${player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
+      </ul>
+    `
+  }
+
+  _renderPlayerBooks(player) {
+    if (player.books.length === 0) {
+      return 'No books yet'
+    } else {
+      return `
+        ${player.books.map(book => 
+          book.cards.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
+        ).join('')}
+      `
+    }
+  }
+
 
   draw(container) {
     container.innerHTML = `
@@ -27,23 +78,8 @@ class GameView {
       <h2>Players</h2>
       ${this._renderAskForm()}
       <ul>
-        ${this.game.players.map(player => 
-          `<li class="player-name">
-            ${player.name}
-            <br><span>Hand:</span>
-            <ul class="player-hand">
-              ${player instanceof Bot ? 
-                player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('') : 
-                player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
-              }
-            </ul>
-            <span>Books:</span>
-            <ul class="player-books">
-              ${player.books.map(book => 
-                book.cards.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
-              ).join('')}
-            </ul>
-          </li>`).join('')}
+        ${this._renderPlayerView()}
+        ${this._renderBotView()}
       </ul>
     `
     const askForm = container.querySelector('.ask-form')

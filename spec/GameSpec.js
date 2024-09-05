@@ -9,6 +9,13 @@ describe('Game', () => {
     game = new Game([player, bot])
   })
   
+  describe('switchPlayers', () => {
+    it ('should switch the current player', () => {
+      expect(game.currentPlayer).toEqual(player)
+      game.switchPlayers()
+      expect(game.currentPlayer).toEqual(bot)
+    })
+  })
 
   describe('deal', () => {
     it ('should deal cards to players', () => {
@@ -18,11 +25,11 @@ describe('Game', () => {
     })
   })
 
-  describe('_moveCardsFromOpponentToPlayer', () => {
+  describe('moveCardsFromOpponentToPlayer', () => {
     it ('should take cards from an opponent if they have the rank you are asking for', () => {
       player.hand = [new Card('3', 'Hearts')]
       bot.hand = [new Card('3', 'Clubs'), new Card('3', 'Diamonds')]
-      game._moveCardsFromOpponentToPlayer(player, bot, '3')
+      game.moveCardsFromOpponentToPlayer(player, bot, '3')
       expect(player.hand.length).toEqual(3)
       expect(bot.hand.length).toEqual(0)
     })
@@ -30,7 +37,7 @@ describe('Game', () => {
     it ('should not take cards from an opponent if they do not have the rank you are asking for', () => {
       player.hand = [new Card('3', 'Hearts')]
       bot.hand = [new Card('A', 'Clubs')]
-      game._moveCardsFromOpponentToPlayer(player, bot, '3')
+      game.moveCardsFromOpponentToPlayer(player, bot, '3')
       expect(player.hand.length).toEqual(1)
       expect(bot.hand.length).toEqual(1)
     })
@@ -51,6 +58,26 @@ describe('Game', () => {
       game.playRound(player, bot.name, '3')
       expect(player.hand.length).toEqual(2)
       expect(bot.hand.length).toEqual
+    })
+
+    it ('should switch turns if player goes fish for a card that they did not ask for', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      bot.hand = [new Card('A', 'Clubs')]
+      game.deck.cards = [new Card('4', 'Hearts')]
+      game.playRound(player, bot.name, '3')
+      expect(player.hand.length).toEqual(2)
+      expect(bot.hand.length).toEqual
+      expect(game.currentPlayer).toEqual(bot)
+    })
+
+    it ('should not switch turns if player goes fish for a card that they asked for', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      bot.hand = [new Card('A', 'Clubs')]
+      game.deck.cards = [new Card('3', 'Diamonds')]
+      game.playRound(player, bot.name, '3')
+      expect(player.hand.length).toEqual(2)
+      expect(bot.hand.length).toEqual
+      expect(game.currentPlayer).toEqual(player)
     })
   })
 
