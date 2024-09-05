@@ -5,16 +5,17 @@ class GameView {
   
   _renderAskForm() {
     const uniqueRanks = [...new Set(this.game.players[0].hand.map(card => card.rank))]
+    const displayType = this.game.currentPlayer === this.game.players[0] ? 'block' : 'none'
     return `
-      <form class="ask-form">
-      <label for="rank">Ask for rank:</label>
-      <select id="rank">
-        ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
-      </select>
-      <select id="opponent">
-        ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
-      </select>
-      <button type="submit">Ask</button>
+      <form class="ask-form" style="display:${displayType}">
+        <label for="rank">Ask for rank:</label>
+        <select id="rank">
+          ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
+        </select>
+        <select id="opponent">
+          ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
+        </select>
+        <button type="submit">Ask</button>
       </form>
     `
   }

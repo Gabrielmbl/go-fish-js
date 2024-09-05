@@ -79,5 +79,22 @@ describe('GameView', () => {
       expect(player.hand.length).toEqual(2)
       expect(bot.hand.length).toEqual
     })
+
+    it ('should hide ask form if it is not the player turn', () => {
+      view.draw(container)
+      let askForm = container.querySelector('.ask-form')
+      expect(askForm.style.display).not.toBe('none')
+
+      game.deck.cards = [new Card('4', 'Hearts')]
+      const form = container.querySelector('.ask-form')
+      const rank = form.querySelector('#rank')
+      const submitButton = form.querySelector('button')
+      rank.value = '3'
+      
+      submitButton.click()
+      
+      askForm = container.querySelector('.ask-form')
+      expect(askForm.style.display).toBe('none')
+    })
   })
 })
