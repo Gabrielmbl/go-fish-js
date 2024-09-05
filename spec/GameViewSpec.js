@@ -56,4 +56,28 @@ describe('GameView', () => {
     expect(container.innerHTML).toMatchHTMLContent(/\[Hand is hidden\]/)
     expect(container.innerHTML).not.toMatchHTMLContent(/A of Hearts/)
   })
+
+  describe('Ask form', () => {
+    it ('should render the ask form', () => {
+      view.draw(container)
+
+      expect(container.innerHTML).toMatchHTMLContent(/Ask for rank:/)
+      expect(container.innerHTML).toMatchHTMLContent(/<option value="3">3<\/option>/)
+      expect(container.innerHTML).not.toMatchHTMLContent(/<option value="A">A<\/option>/)
+    })
+
+    it ('should play a round when the form is submitted', () => {
+      view.draw(container)
+
+      const form = container.querySelector('.ask-form')
+      const rank = form.querySelector('#rank')
+      const submitButton = form.querySelector('button')
+      rank.value = '3'
+
+      submitButton.click()
+
+      expect(player.hand.length).toEqual(2)
+      expect(bot.hand.length).toEqual
+    })
+  })
 })

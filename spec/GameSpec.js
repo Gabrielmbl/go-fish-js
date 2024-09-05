@@ -18,4 +18,22 @@ describe('Game', () => {
     })
   })
 
+  describe('playRound', () => {
+    it ('should take cards from an opponent if they have the rank you are asking for', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      bot.hand = [new Card('3', 'Clubs')]
+      game.playRound(player, bot, '3')
+      expect(player.hand.length).toEqual(2)
+      expect(bot.hand.length).toEqual(0)
+    })
+
+    it ('should make player go fish if opponent does not have the rank you are asking for', () => {
+      player.hand = [new Card('3', 'Hearts')]
+      bot.hand = [new Card('A', 'Clubs')]
+      game.playRound(player, bot, '3')
+      expect(player.hand.length).toEqual(2)
+      expect(bot.hand.length).toEqual
+    })
+  })
+
 })

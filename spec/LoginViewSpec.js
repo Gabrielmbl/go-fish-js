@@ -48,7 +48,7 @@ describe('LoginView', () => {
     form.querySelector('.number-of-opponents').value = 2
     expect(params).toEqual({})
 
-    submitButton.click();
+    submitButton.click()
 
     expect(params).toEqual({ name: 'gabriel', opponentCount: '2' })
   })
