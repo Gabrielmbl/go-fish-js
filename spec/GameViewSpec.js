@@ -18,23 +18,6 @@ describe('GameView', () => {
     bot.hand = [new Card('A', 'Hearts')]
     game = new Game([player, bot])
     view = new GameView(game)
-
-    jasmine.addMatchers({
-      toMatchHTMLContent: () => {
-        return {
-          compare: function(actual, expectedRegex) {
-            const result = {}
-            result.pass = expectedRegex.test(actual)
-            if (result.pass) {
-              result.message = `Expected HTML content to match the regular expression ${expectedRegex}`
-            } else {
-              result.message = `Expected HTML content to match the regular expression ${expectedRegex}, but it did not`
-            }
-            return result
-          }
-        }
-      }
-    })
   })
 
   afterEach(() => {
@@ -71,5 +54,6 @@ describe('GameView', () => {
     expect(container.innerHTML).toMatchHTMLContent(/2 of Diamonds/)
     expect(container.innerHTML).toMatchHTMLContent(/2 of Spades/)
     expect(container.innerHTML).toMatchHTMLContent(/\[Hand is hidden\]/)
+    expect(container.innerHTML).not.toMatchHTMLContent(/A of Hearts/)
   })
 })

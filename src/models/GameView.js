@@ -2,6 +2,9 @@ class GameView {
   constructor(game) {
     this.game = game
   }
+  
+  // TODO: Work on game logic
+  // TODO: Create a player view and bot view
 
   draw(container) {
     container.innerHTML = `
