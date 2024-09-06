@@ -42,7 +42,7 @@ class Game {
     this.deck().shuffle()
     this.players().forEach(player => {
       for (let i = 0; i < Game.INITIAL_HAND_SIZE; i++) {
-        player.addToHand([this.deck().cards.pop()])
+        player.addToHand([this.deck().cards().pop()])
       }
     })
   }
@@ -82,7 +82,7 @@ class Game {
   }
 
   fishForCard() {
-    const card = this.deck().cards.pop()
+    const card = this.deck().cards().pop()
     this.currentPlayer().addToHand(card)
     return card
   }

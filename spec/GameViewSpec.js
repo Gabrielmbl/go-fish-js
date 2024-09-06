@@ -73,7 +73,6 @@ describe('GameView', () => {
       const rank = form.querySelector('#rank')
       const submitButton = form.querySelector('button')
       rank.value = '3'
-
       submitButton.click()
       expect(player.hand().length).toEqual(2)
       expect(bot.hand().length).toEqual

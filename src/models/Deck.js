@@ -3,11 +3,11 @@ class Deck {
   static RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
 
   constructor(cards = this.create()) {
-    this.cards = cards
+    this._cards = cards
   }
 
-  setCards(cards) {
-    this.cards = cards
+  cards() {
+    return this._cards
   }
 
   create() {
@@ -21,11 +21,11 @@ class Deck {
   }
 
   shuffle() {
-    for (let i = this.cards.length - 1; i > 0; i--) {
+    for (let i = this.cards().length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * i)
-      const temp = this.cards[i]
-      this.cards[i] = this.cards[j]
-      this.cards[j] = temp
+      const temp = this.cards()[i]
+      this.cards()[i] = this.cards()[j]
+      this.cards()[j] = temp
     }
   }
 }
