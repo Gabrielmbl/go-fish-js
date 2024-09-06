@@ -5,7 +5,7 @@ class Bot extends Player {
 
   chooseRandomRank() {
     const randomIndex = Math.floor(Math.random() * this.hand().length)
-    return this.hand()[randomIndex].rank
+    return this.hand()[randomIndex].rank()
   }
 
   chooseRandomOpponent(players) {

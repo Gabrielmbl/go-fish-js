@@ -1,6 +1,14 @@
 class Card {
   constructor(rank, suit) {
-    this.rank = rank
+    this._rank = rank
     this.suit = suit
+  }
+
+  rank() {
+    return this._rank
+  }
+
+  suit() {
+    return this._suit
   }
 }

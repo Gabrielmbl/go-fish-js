@@ -28,7 +28,7 @@ class Player {
   // TODO: Change it to use `this` like game.js
 
   handHasRanks(rank) {
-    return this.hand().some(card => card.rank === rank)
+    return this.hand().some(card => card.rank() === rank)
   }
 
   addToHand(cards) {
@@ -40,7 +40,7 @@ class Player {
   }
 
   removeByRank(rank) {
-    const newHand = this.hand().filter(card => card.rank !== rank)
+    const newHand = this.hand().filter(card => card.rank() !== rank)
     this.setHand(newHand)
   }
 }

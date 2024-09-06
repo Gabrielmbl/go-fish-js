@@ -63,7 +63,7 @@ class Game {
   }
 
   moveCardsFromOpponentToCurrentPlayer(opponent, rank) {
-    const cards = opponent.hand().filter(card => card.rank === rank)
+    const cards = opponent.hand().filter(card => card.rank() === rank)
     this.currentPlayer().addToHand(cards)
     opponent.removeByRank(rank)
   }
@@ -76,7 +76,7 @@ class Game {
 
   handleGoFish(rank) {
     const card = this.fishForCard()
-    if (card.rank !== rank) {
+    if (card.rank() !== rank) {
       this.switchPlayers()
     }
   }

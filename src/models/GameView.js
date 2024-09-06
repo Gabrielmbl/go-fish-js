@@ -10,7 +10,7 @@ class GameView {
   _renderAskForm() {
     if (!this.game.isItHumanPlayerTurn()) return ''
 
-    const uniqueRanks = [...new Set(this.game.players()[0].hand().map(card => card.rank))]
+    const uniqueRanks = [...new Set(this.game.players()[0].hand().map(card => card.rank()))]
     return `
       <form class="ask-form">
         <label for="rank">Ask for rank:</label>
@@ -69,7 +69,7 @@ class GameView {
   _renderPlayerHand(player) {
     return `
       <ul class="player-hand">
-        ${player.hand().map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
+        ${player.hand().map(card => `<li>${card.rank()} of ${card.suit}</li>`).join('')}
       </ul>
     `
   }
@@ -80,7 +80,7 @@ class GameView {
     } else {
       return `
         ${player.books().map(book => 
-          book.cards.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
+          book.cards.map(card => `<li>${card.rank()} of ${card.suit}</li>`).join('')
         ).join('')}
       `
     }
