@@ -80,7 +80,7 @@ class GameView {
     } else {
       return `
         ${player.books().map(book => 
-          book.cards.map(card => `<li>${card.rank()} of ${card.suit}</li>`).join('')
+          book.cards().map(card => `<li>${card.rank()} of ${card.suit}</li>`).join('')
         ).join('')}
       `
     }

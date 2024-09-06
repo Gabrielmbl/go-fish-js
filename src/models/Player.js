@@ -25,8 +25,6 @@ class Player {
     this._books = book
   }
 
-  // TODO: Change it to use `this` like game.js
-
   handHasRanks(rank) {
     return this.hand().some(card => card.rank() === rank)
   }
