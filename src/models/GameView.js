@@ -1,12 +1,16 @@
 class GameView {
-  constructor(game) {
+  // constructor(game) {
+  //   this.game = game
+  // }
+  constructor(game, playRoundCallback) {
     this.game = game
+    this.playRoundCallback = playRoundCallback
   }
   
   _renderAskForm() {
     if (!this.game.isItHumanPlayerTurn()) return ''
 
-    const uniqueRanks = [...new Set(this.game.players[0].hand.map(card => card.rank))]
+    const uniqueRanks = [...new Set(this.game.players()[0].hand().map(card => card.rank))]
     return `
       <form class="ask-form">
         <label for="rank">Ask for rank:</label>
@@ -14,7 +18,7 @@ class GameView {
           ${uniqueRanks.map(rank => `<option value="${rank}">${rank}</option>`).join('')}
         </select>
         <select id="opponent">
-          ${this.game.players.filter(player => player !== this.game.players[0]).map(player => `<option value="${player.name}">${player.name}</option>`).join('')}
+          ${this.game.players().filter(player => player !== this.game.players()[0]).map(player => `<option value="${player.name()}">${player.name()}</option>`).join('')}
         </select>
         <button class="btn" type="submit">Ask</button>
       </form>
@@ -31,10 +35,10 @@ class GameView {
   }
 
   _renderPlayerView() {
-    const player = this.game.players.filter(player => !(player instanceof Bot))[0]
+    const player = this.game.players().filter(player => !(player instanceof Bot))[0]
     return `
       <li class="player-name">
-        ${player.name}
+        ${player.name()}
         <br><span>Hand:</span>
         ${this._renderPlayerHand(player)}
         <span>Books:</span>
@@ -46,11 +50,11 @@ class GameView {
   }
 
   _renderBotView() {
-    const bots = this.game.players.filter(player => player instanceof Bot)
+    const bots = this.game.players().filter(player => player instanceof Bot)
     return `
       ${bots.map(bot => `
         <li class="player-name">
-          ${bot.name}
+          ${bot.name()}
           <br><span>Hand:</span>
           ${this._renderPlayerHand(bot)}
           <span>Books:</span>
@@ -65,17 +69,17 @@ class GameView {
   _renderPlayerHand(player) {
     return `
       <ul class="player-hand">
-        ${player.hand.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
+        ${player.hand().map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')}
       </ul>
     `
   }
 
   _renderPlayerBooks(player) {
-    if (player.books.length === 0) {
+    if (player.books().length === 0) {
       return 'No books yet'
     } else {
       return `
-        ${player.books.map(book => 
+        ${player.books().map(book => 
           book.cards.map(card => `<li>${card.rank} of ${card.suit}</li>`).join('')
         ).join('')}
       `
@@ -113,7 +117,7 @@ class GameView {
       event.preventDefault()
       const rank = askForm.querySelector('#rank').value
       const opponent = askForm.querySelector('#opponent').value
-      this.game.playRound(this.game.currentPlayer.name, opponent, rank)
+      this.game.playRound(opponent, rank)
       this.draw(container)
     }.bind(this))
   }

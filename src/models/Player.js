@@ -1,19 +1,46 @@
 class Player {
-  constructor(name) {
-    this.name = name
-    this.hand = []
-    this.books = []
+  constructor(name, hand = [], books = []) {
+    this._name = name
+    this._hand = hand
+    this._books = books
   }
 
+  name() {
+    return this._name
+  }
+
+  hand() {
+    return this._hand
+  }
+
+  books() {
+    return this._books
+  }
+
+  setHand(hand) {
+    this._hand = hand
+  }
+
+  setBooks(book) {
+    this._books = book
+  }
+
+  // TODO: Change it to use `this` like game.js
+
   handHasRanks(rank) {
-    return this.hand.some(card => card.rank === rank)
+    return this.hand().some(card => card.rank === rank)
   }
 
   addToHand(cards) {
-    this.hand = this.hand.concat(cards)
+    this.setHand(this.hand().concat(cards))
+  }
+
+  addToBooks(book) {
+    this.setBooks(this.books().concat(book))
   }
 
   removeByRank(rank) {
-    this.hand = this.hand.filter(card => card.rank !== rank)
+    const newHand = this.hand().filter(card => card.rank !== rank)
+    this.setHand(newHand)
   }
 }
