@@ -2,9 +2,10 @@ class GameView {
   // constructor(game) {
   //   this.game = game
   // }
-  constructor(game, playRoundCallback) {
+  constructor(game, playRoundCallback, endGameCallback) {
     this.game = game
     this.playRoundCallback = playRoundCallback
+    this.endGameCallback = endGameCallback
   }
   
   _renderAskForm() {
@@ -25,13 +26,14 @@ class GameView {
     `
   }
 
-  _renderContinueButton() {
-    if (this.game.isItHumanPlayerTurn()) return ''
-    return `
-      <form class="continue-form">
-        <button class="btn continue-button" type="submit">Continue</button>
-      </form>
-    `
+  _renderSeeResultsButton() {
+    if (this.game.gameWinners().length > 0) {
+      return `
+        <form class="see-results-form">
+          <button class="btn" type="submit">See Results</button>
+        </form>
+      `
+    }
   }
 
   _renderPlayerView() {
@@ -96,7 +98,7 @@ class GameView {
       <h1>Go Fish</h1>
       <h2>Players</h2>
       ${this._renderAskForm()}
-      ${this._renderContinueButton()}
+      ${this._renderSeeResultsButton()}
       <ul>
         ${this._renderPlayerView()}
         ${this._renderBotView()}
@@ -107,12 +109,12 @@ class GameView {
 
   addEventListeners(container) {
     const askForm = container.querySelector('.ask-form')
-    const continueForm = container.querySelector('.continue-form')
+    const seeResultsForm = container.querySelector('.see-results-form')
     if (askForm) {
       this.addFormEventListener(askForm, container)
     }
-    if (continueForm) {
-      this.addContinueEventListener(continueForm, container)
+    if (seeResultsForm) {
+      this.addResultsEventListeners(seeResultsForm, container)
     }
   }
 
@@ -126,11 +128,11 @@ class GameView {
     }.bind(this))
   }
 
-  addContinueEventListener(continueForm, container) {
-    continueForm.addEventListener('submit', function (event) {
+  addResultsEventListeners(seeResultsForm, container) {
+    seeResultsForm.addEventListener('submit', function (event) {
       event.preventDefault()
-      this.game.botTakeTurn()
-      this.draw(container)
+
+      this.endGameCallback()
     }.bind(this))
   }
 }
