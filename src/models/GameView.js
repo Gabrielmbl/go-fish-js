@@ -86,6 +86,10 @@ class GameView {
     }
   }
 
+  // TODO: End game view
+  // TODO: Smoke test for game logic
+  // TODO: Styling
+
 
   draw(container) {
     container.innerHTML = `

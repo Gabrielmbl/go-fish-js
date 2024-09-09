@@ -10,9 +10,7 @@ class GoFishController {
 
   startGame(name, opponentCount) {
     const player = new Player(name)
-    // TODO: Create the bot in the game model, so that it can be tested
-    const bots = Array.from({ length: opponentCount }, (_, i) => new Bot(`Bot ${i + 1}`))
-    this.game = new Game([player, ...bots])
+    this.game = new Game(player, opponentCount)
     this.game.deal()
     const view = new GameView(this.game)
     // const view = new GameView(game, this.playRound.bind(this))

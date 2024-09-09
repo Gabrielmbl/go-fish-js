@@ -1,10 +1,10 @@
 class Game {
   static INITIAL_HAND_SIZE = 7
 
-  constructor(players, deck = new Deck()) {
-    this._players = players
+  constructor(player, numberBots = 1, deck = new Deck()) {
+    this._players = [player, ...this.createBots(numberBots)]
     this._deck = deck
-    this._currentPlayer = players[0]
+    this._currentPlayer = player
     this._playersWithHighestNumberOfBooks = []
     this._gameWinners = []
   }
@@ -39,6 +39,11 @@ class Game {
   
   setCurrentPlayer(player) {
     this._currentPlayer = player
+  }
+
+  createBots(numberBots) {
+    const bots = Array.from({ length: numberBots }, (_, i) => new Bot(`Bot ${i + 1}`))
+    return bots
   }
   
   isItHumanPlayerTurn() {
@@ -123,7 +128,6 @@ class Game {
   }
 
   fishForCard() {
-    // TODO: Have method to call pop on deck ->.cards().pop()
     const card = this.deck().popCard()
     this.currentPlayer().addToHand(card)
     return card

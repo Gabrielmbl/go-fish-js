@@ -14,9 +14,9 @@ describe('GameView', () => {
     player.setHand([new Card('3', 'Hearts')])
     book = new Book(new Card('2', 'Hearts'), new Card('2', 'Clubs'), new Card('2', 'Diamonds'), new Card('2', 'Spades'))
     player.books().push(book)
-    bot = new Bot('lucas')
+    game = new Game(player, 1)
+    bot = game.players()[1]
     bot.setHand([new Card('A', 'Hearts')])
-    game = new Game([player, bot])
     view = new GameView(game)
   })
 
@@ -53,8 +53,6 @@ describe('GameView', () => {
     expect(container.innerHTML).toMatchHTMLContent(/2 of Clubs/)
     expect(container.innerHTML).toMatchHTMLContent(/2 of Diamonds/)
     expect(container.innerHTML).toMatchHTMLContent(/2 of Spades/)
-    // expect(container.innerHTML).toMatchHTMLContent(/\[Hand is hidden\]/)
-    // expect(container.innerHTML).not.toMatchHTMLContent(/A of Hearts/)
   })
 
   describe('Ask form', () => {

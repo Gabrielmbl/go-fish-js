@@ -6,10 +6,22 @@ describe('Game', () => {
 
   beforeEach(() => {
     player = new Player('Gabriel')
-    bot1 = new Bot('Lucas')
-    bot2 = new Bot('Pedro')
-    game = new Game([player, bot1, bot2])
+    game = new Game(player, 2)
+    bot1 = game.players()[1]
+    bot2 = game.players()[2]
   })
+
+  describe('Bot creation', () => {
+    it('should create bots', () => {
+      testPlayer = new Player('Lucas')
+      numberOfBots = 2
+      game = new Game(testPlayer, numberOfBots)
+      expect(game.players().length).toEqual(3)
+      expect(game.players()[1]).toBeInstanceOf(Bot)
+      expect(game.players()[2]).toBeInstanceOf(Bot)
+    })
+  })
+
 
   describe('switchPlayers', () => {
     it('should switch the current player', () => {
