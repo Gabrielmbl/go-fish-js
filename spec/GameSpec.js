@@ -183,6 +183,20 @@ describe('Game', () => {
     })
   })
 
+  fdescribe('Smoke test', () => {
+    it ('should play a game till the end', () => {
+      game.deal()
+    
+      while(!game.gameWinners().length) {
+        const opponents = game.players().filter(player => player !== game.currentPlayer())
+        randomOpponent = opponents[Math.floor(Math.random() * opponents.length)]
+        const rank = Math.floor(Math.random() * game.currentPlayer().hand().length)
+        game.playRound(randomOpponent.name(), rank)
+      }
+      expect(game.gameWinners().length).toBeGreaterThan(0)
+    })
+  })
+
   describe('createRoundResult', () => {
     it('it should create a round result', () => {
       // createRoundResult(roundPlayer = player, opponent = bot1, cardRank = '3')
