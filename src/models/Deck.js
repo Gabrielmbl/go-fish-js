@@ -28,4 +28,12 @@ class Deck {
       this.cards()[j] = temp
     }
   }
+
+  deckEmpty() {
+    return this.cards().length === 0
+  }
+
+  popCard() {
+    return this.cards().pop()
+  }
 }

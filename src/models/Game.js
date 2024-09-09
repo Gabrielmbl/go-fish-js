@@ -49,7 +49,7 @@ class Game {
     this.deck().shuffle()
     this.players().forEach(player => {
       for (let i = 0; i < Game.INITIAL_HAND_SIZE; i++) {
-        player.addToHand([this.deck().cards().pop()])
+        player.addToHand([this.deck().popCard()])
       }
     })
   }
@@ -87,7 +87,7 @@ class Game {
     this.players().forEach(player => {
       if (player.hand().length === 0) {
         while (this.deck().cards().length > 0 && player.hand().length < Game.INITIAL_HAND_SIZE) {
-          player.addToHand([this.deck().cards().pop()])
+          player.addToHand([this.deck().popCard()])
         }
       }
     })
@@ -111,8 +111,7 @@ class Game {
   }
 
   handleGoFish(rank) {
-    // TODO: Make .cards().length its own method deckEmpty() on Deck 
-    if (this.deck().cards().length === 0) {
+    if (this.deck().deckEmpty()) {
       this.switchPlayers()
       return
     }
@@ -125,8 +124,7 @@ class Game {
 
   fishForCard() {
     // TODO: Have method to call pop on deck ->.cards().pop()
-    // TODO: Play game all the way
-    const card = this.deck().cards().pop()
+    const card = this.deck().popCard()
     this.currentPlayer().addToHand(card)
     return card
   }
@@ -139,7 +137,7 @@ class Game {
   }
 
   checkForWinner() {
-    if (!(this.deck().cards().length === 0)) return null
+    if (!(this.deck().deckEmpty())) return null
 
     if (this.players().some(player => player.hand().length > 0)) return null
     const maxNumberOfBooks = Math.max(...this.players().map(player => player.books().length))
