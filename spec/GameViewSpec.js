@@ -73,9 +73,9 @@ describe('GameView', () => {
       const rank = form.querySelector('#rank')
       const submitButton = form.querySelector('button')
       rank.value = '3'
+      expect(bot.hand().length).toEqual(1)
       submitButton.click()
-      expect(player.hand().length).toEqual(2)
-      expect(bot.hand().length).toEqual
+      expect(bot.hand().length).toBeGreaterThan(1)
     })
 
     it('should hide ask form if it is not the player turn', () => {
@@ -96,7 +96,7 @@ describe('GameView', () => {
 
   describe('Continue button', () => {
     it('should make bot take turn if user presses on the continue button', () => {
-      game.deck.cards = [new Card('4', 'Hearts')]
+      game.setDeck(new Deck([new Card('4', 'Hearts')]))
       game.players()[0].setHand([new Card('3', 'Hearts')])
       game.players()[1].setHand([new Card('A', 'Hearts')])
       game.setCurrentPlayer(game.players()[1])
@@ -104,7 +104,6 @@ describe('GameView', () => {
       view.draw(container)
       let continueButton = container.querySelector('.continue-button')
       continueButton.click()
-
       expect(game.players()[1].hand().length).toEqual(2)
     })
   })

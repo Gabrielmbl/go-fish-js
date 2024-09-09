@@ -37,8 +37,35 @@ class Player {
     this.setBooks(this.books().concat(book))
   }
 
+  checkForBooks() {
+    const rankCounts = this.rankCountMap()
+  
+    Object.keys(rankCounts).forEach(rank => {
+      if (rankCounts[rank] === 4) {
+        const book = this.hand().filter(card => card.rank() === rank)
+        this.addToBooks(new Book(...book))
+        this.removeByRank(rank)
+      }
+    })
+  }
+  
+
+  rankCountMap() {
+    const rankCounts = {}
+
+    this.hand().forEach(card => {
+      const rank = card.rank()
+      rankCounts[rank] = (rankCounts[rank] || 0) + 1
+    })
+    return rankCounts
+  }
+
   removeByRank(rank) {
     const newHand = this.hand().filter(card => card.rank() !== rank)
     this.setHand(newHand)
+  }
+
+  score() {
+    return this.books().reduce((total, book) => total + book.value(), 0)
   }
 }

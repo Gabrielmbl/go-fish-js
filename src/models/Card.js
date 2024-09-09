@@ -1,7 +1,7 @@
 class Card {
   constructor(rank, suit) {
     this._rank = rank
-    this.suit = suit
+    this._suit = suit
   }
 
   rank() {
@@ -10,5 +10,9 @@ class Card {
 
   suit() {
     return this._suit
+  }
+
+  numericalRank() {
+    return Deck.RANKS.indexOf(this.rank()) + 1
   }
 }

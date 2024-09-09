@@ -41,4 +41,14 @@ describe('Player', () => {
       expect(player.books()[0]).toBeInstanceOf(Book)
     })
   })
+
+  describe('score', () => {
+    it('should return the total value of the player books', () => {
+      const book1 = new Book(new Card('2', 'Hearts'), new Card('2', 'Clubs'), new Card('2', 'Diamonds'), new Card('2', 'Spades'))
+      const book2 = new Book(new Card('3', 'Hearts'), new Card('3', 'Clubs'), new Card('3', 'Diamonds'), new Card('3', 'Spades'))
+      player.addToBooks(book1)
+      player.addToBooks(book2)
+      expect(player.score()).toEqual(3)
+    })
+  })
 })

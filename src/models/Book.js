@@ -6,4 +6,8 @@ class Book {
   cards() {
     return this._cards
   }
+
+  value() {
+    return this.cards()[0].numericalRank()
+  }
 }

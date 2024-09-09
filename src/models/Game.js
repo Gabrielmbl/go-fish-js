@@ -5,6 +5,8 @@ class Game {
     this._players = players
     this._deck = deck
     this._currentPlayer = players[0]
+    this._playersWithHighestNumberOfBooks = []
+    this._gameWinners = []
   }
 
   players() {
@@ -19,6 +21,14 @@ class Game {
     return this._currentPlayer
   }
 
+  playersWithHighestNumberOfBooks() {
+    return this._playersWithHighestNumberOfBooks
+  }
+
+  gameWinners() {
+    return this._gameWinners
+  }
+
   setPlayers(players) {
     this._players = players
   }
@@ -31,9 +41,6 @@ class Game {
     this._currentPlayer = player
   }
   
-  // TODO: use this.constructor() all around
-  // TODO: Have bot to play automatically after switching turns
-
   isItHumanPlayerTurn() {
     return this.currentPlayer() === this.players()[0]
   }
@@ -48,13 +55,42 @@ class Game {
   }
 
   playRound(opponentName, rank) {
+    if (!(this.currentPlayerHasCards())) return null
     const opponent = this.setOpponent(opponentName)
     if (opponent.handHasRanks(rank)) {
       this.moveCardsFromOpponentToCurrentPlayer(opponent, rank)
     } else {
       this.handleGoFish(rank)
     }
-    // TODO: Call playround until it's not a bot 
+    this.finalizeTurn()
+  }
+
+  currentPlayerHasCards() {
+    if (this.currentPlayer().hand().length === 0) {
+      this.switchPlayers()
+      return false
+    }
+    return true
+  }
+  
+  finalizeTurn() {
+    this.currentPlayer().checkForBooks()
+    this.checkForWinner()
+    if (this.gameWinners().length > 0) return
+    this.checkEmptyHandOrDraw()
+    while (!this.isItHumanPlayerTurn() && this.currentPlayer().hand().length > 0) this.botTakeTurn()
+  }
+
+  checkEmptyHandOrDraw() {
+    if (this.players().every(player => player.hand().length > 0)) return
+
+    this.players().forEach(player => {
+      if (player.hand().length === 0) {
+        while (this.deck().cards().length > 0 && player.hand().length < Game.INITIAL_HAND_SIZE) {
+          player.addToHand([this.deck().cards().pop()])
+        }
+      }
+    })
   }
 
   setOpponent(opponentName) {
@@ -75,6 +111,12 @@ class Game {
   }
 
   handleGoFish(rank) {
+    // TODO: Make .cards().length its own method deckEmpty() on Deck 
+    if (this.deck().cards().length === 0) {
+      this.switchPlayers()
+      return
+    }
+
     const card = this.fishForCard()
     if (card.rank() !== rank) {
       this.switchPlayers()
@@ -82,6 +124,8 @@ class Game {
   }
 
   fishForCard() {
+    // TODO: Have method to call pop on deck ->.cards().pop()
+    // TODO: Play game all the way
     const card = this.deck().cards().pop()
     this.currentPlayer().addToHand(card)
     return card
@@ -93,6 +137,23 @@ class Game {
     const rank = bot.chooseRandomRank()
     this.playRound(opponent.name(), rank)
   }
+
+  checkForWinner() {
+    if (!(this.deck().cards().length === 0)) return null
+
+    if (this.players().some(player => player.hand().length > 0)) return null
+    const maxNumberOfBooks = Math.max(...this.players().map(player => player.books().length))
+    const playersWithMaxBooks = this.players().filter(player => player.books().length === maxNumberOfBooks)
+    this.playersWithHighestNumberOfBooks().push(...playersWithMaxBooks)
+    this.compareBookValues()
+  }
+
+  compareBookValues(playersWithHighestNumberOfBooks = this.playersWithHighestNumberOfBooks()) {
+    const highestBookScore = Math.max(...playersWithHighestNumberOfBooks.map(player => player.score()))
+    const winners = playersWithHighestNumberOfBooks.filter(player => player.score() === highestBookScore)
+    this.gameWinners().push(...winners)
+  }
+
 
   // createRoundResult(roundPlayer = currentPlayer, opponent, cardRank, bookRank, gameWinnerNames) {
   //   roundResults.push(new RoundResult())
