@@ -183,24 +183,21 @@ describe('Game', () => {
     })
   })
 
-  // describe('Smoke test', () => {
-  //   it ('should play a game till the end', () => {
-  //     game.deal()
+  describe('Smoke test', () => {
+    it ('should play a game till the end', () => {
+      game.deal()
     
-  //     while(!game.gameWinners().length) {
-  //       // TODO: Ask why this is happening
-  //       // const randomOpponent = game.currentPlayer().chooseRandomOpponent(game.players())
-  //       // const rank = game.currentPlayer().chooseRandomRank()
+      while(!game.gameWinners().length) {
+        if (game.currentPlayer().handEmpty()) game.switchPlayers()
 
-  //       const opponents = game.players().filter(player => player !== game.currentPlayer())
-  //       randomOpponent = opponents[Math.floor(Math.random() * opponents.length)]
-  //       const rank = Math.floor(Math.random() * game.currentPlayer().hand().length)
+        const randomOpponent = game.currentPlayer().chooseRandomOpponent(game.players())
+        const rank = game.currentPlayer().chooseRandomRank()
 
-  //       game.playRound(randomOpponent.name(), rank)
-  //     }
-  //     expect(game.gameWinners().length).toBeGreaterThan(0)
-  //   })
-  // })
+        game.playRound(randomOpponent.name(), rank)
+      }
+      expect(game.gameWinners().length).toBeGreaterThan(0)
+    })
+  })
 
   describe('createRoundResult', () => {
     it('should create a round result', () => {

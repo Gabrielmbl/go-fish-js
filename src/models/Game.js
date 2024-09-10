@@ -71,7 +71,7 @@ class Game {
 
   playRound(opponentName, rank) {
     if (!(this.currentPlayerHasCards())) return
-    
+
     var { opponent, cardFished } = this.setVariablesForPlayRound(opponentName)
     if (opponent.handHasRanks(rank)) {
       this.moveCardsFromOpponentToCurrentPlayer(opponent, rank)
@@ -89,7 +89,7 @@ class Game {
   }
 
   currentPlayerHasCards() {
-    if (this.currentPlayer().hand().length === 0) {
+    if (this.currentPlayer().handEmpty()) {
       this.switchPlayers()
       return false
     }

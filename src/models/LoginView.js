@@ -52,7 +52,6 @@ class LoginView {
 
     const form = container.querySelector('.form-group')
     form.addEventListener('submit', function(event) {
-      console.log('here')
       event.preventDefault()
 
       const name = form.querySelector('#player-name').value

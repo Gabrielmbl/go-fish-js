@@ -37,6 +37,10 @@ class Player {
     this.setBooks(this.books().concat(book))
   }
 
+  handEmpty() {
+    return this.hand().length === 0
+  }
+
   checkForBooks() {
     const rankCounts = this.rankCountMap()
     let booksMade = []
@@ -56,16 +60,16 @@ class Player {
     })
   }
 
-  // chooseRandomRank() {
-  //   const randomIndex = Math.floor(Math.random() * this.hand().length)
-  //   return this.hand()[randomIndex].rank()
-  // }
+  chooseRandomRank() {
+    const randomIndex = Math.floor(Math.random() * this.hand().length)
+    return this.hand()[randomIndex].rank()
+  }
 
-  // chooseRandomOpponent(players) {
-  //   const opponents = players.filter(player => player !== this)
-  //   const randomIndex = Math.floor(Math.random() * opponents.length)
-  //   return opponents[randomIndex]
-  // }
+  chooseRandomOpponent(players) {
+    const opponents = players.filter(player => player !== this)
+    const randomIndex = Math.floor(Math.random() * opponents.length)
+    return opponents[randomIndex]
+  }
   
   rankCountMap() {
     const rankCounts = {}
