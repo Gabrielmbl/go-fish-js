@@ -3,22 +3,60 @@ class LoginView {
     this.onSubmitCallback = onSubmitCallback
   }
 
+  _renderSelect() {
+    return `
+    <label class="form-label" for="number-of-opponents">Number of Opponents</label>
+    <select class="form-control form-control--large" id="number-of-opponents">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+    `
+  }
+
+  _renderHeader() {
+    return `
+    <div class="app__header">
+      <div class="navbar">
+        <nav class="navbar__content navbar__content--justify-start">
+          <span>Go Fish</span>
+        </nav>
+      </div>
+    </div>
+    `
+  }
+
+  _renderForm() {
+    return `
+    ${this._renderHeader()}
+    <div class="flex justify-center full-height items-center">
+      <form class="form-group login-container">
+        <label class="form-label" for="player-name">Your name</label>
+        <input type="Text" placeholder="Name" id="player-name" class="form-control form-control--large">
+        ${this._renderSelect()}
+        <input class="btn" type="submit" value="Start Game">
+      </form>
+    </div>
+    `
+  }
+
   draw(container) {
     container.innerHTML = `
-      <form class="login-form">
-        <label for="name">Name:</label>
-        <input type="text" class="name" name="name" required>
-        <label for="number-of-opponents">Number of Players:</label>
-        <input type="number" class="number-of-opponents" name="number-of-opponents" min="1" max="8" required>
-        <input type="submit" value="Start Game">
-      </form>
+      ${this._renderForm()}
     `
-    const form = container.querySelector('.login-form')
+
+    const form = container.querySelector('.form-group')
     form.addEventListener('submit', function(event) {
+      console.log('here')
       event.preventDefault()
 
-      const name = form.querySelector('.name').value
-      const opponentCount = form.querySelector('.number-of-opponents').value
+      const name = form.querySelector('#player-name').value
+      const opponentCount = form.querySelector('#number-of-opponents').value
       this.onSubmitCallback(name, opponentCount)
     }.bind(this))
   }
