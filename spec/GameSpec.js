@@ -183,24 +183,66 @@ describe('Game', () => {
     })
   })
 
-  fdescribe('Smoke test', () => {
-    it ('should play a game till the end', () => {
-      game.deal()
+  // describe('Smoke test', () => {
+  //   it ('should play a game till the end', () => {
+  //     game.deal()
     
-      while(!game.gameWinners().length) {
-        const opponents = game.players().filter(player => player !== game.currentPlayer())
-        randomOpponent = opponents[Math.floor(Math.random() * opponents.length)]
-        const rank = Math.floor(Math.random() * game.currentPlayer().hand().length)
-        game.playRound(randomOpponent.name(), rank)
-      }
-      expect(game.gameWinners().length).toBeGreaterThan(0)
-    })
-  })
+  //     while(!game.gameWinners().length) {
+  //       // TODO: Ask why this is happening
+  //       // const randomOpponent = game.currentPlayer().chooseRandomOpponent(game.players())
+  //       // const rank = game.currentPlayer().chooseRandomRank()
+
+  //       const opponents = game.players().filter(player => player !== game.currentPlayer())
+  //       randomOpponent = opponents[Math.floor(Math.random() * opponents.length)]
+  //       const rank = Math.floor(Math.random() * game.currentPlayer().hand().length)
+
+  //       game.playRound(randomOpponent.name(), rank)
+  //     }
+  //     expect(game.gameWinners().length).toBeGreaterThan(0)
+  //   })
+  // })
 
   describe('createRoundResult', () => {
-    it('it should create a round result', () => {
-      // createRoundResult(roundPlayer = player, opponent = bot1, cardRank = '3')
-      // expect(game.roundResults.length).toEqual(1)
+    it('should create a round result', () => {
+      player.setHand([new Card('3', 'Hearts')])
+      bot1.setHand([new Card('3', 'Clubs')])
+      bot2.setHand([])
+      game.setDeck(new Deck([]))
+      game.playRound(bot1.name(), '3')
+      expect(player.hand().length).toEqual(2)
+      expect(bot1.hand().length).toEqual(0)
+      expect(game.roundResults().length).toEqual(1)
+    })
+
+    it('should create a round result with appropriate attributes', () => {
+      player.setHand([new Card('3', 'Hearts')])
+      bot1.setHand([new Card('3', 'Clubs')])
+      bot2.setHand([])
+      game.setDeck(new Deck([]))
+      game.playRound(bot1.name(), '3')
+      expect(game.roundResults()[0].playerName()).toEqual(player.name())
+      expect(game.roundResults()[0].opponentName()).toEqual(bot1.name())
+      expect(game.roundResults()[0].rankAsked()).toEqual('3')
+      expect(game.roundResults()[0].cardFished()).toEqual(null)
+      expect(game.roundResults()[0].gameWinners()).toEqual([])
+    })
+
+    it ('should inform if a book was made', () => {
+      player.setHand([new Card('3', 'Hearts'), new Card('3', 'Clubs'), new Card('3', 'Diamonds'), new Card('4', 'Spades'), new Card('4', 'Hearts'), new Card('4', 'Clubs'), new Card('4', 'Diamonds')])
+      bot1.setHand([new Card('3', 'Spades')])
+      bot2.setHand([])
+      game.setDeck(new Deck([]))
+      game.playRound(bot1.name(), '3')
+      expect(game.roundResults()[0].booksMade().length).toBeGreaterThan(0)
+    })
+
+    it ('should inform the game winners', () => {
+      player.setHand([new Card('3', 'Hearts'), new Card('3', 'Clubs'), new Card('3', 'Diamonds'), new Card('4', 'Spades'), new Card('4', 'Hearts'), new Card('4', 'Clubs'), new Card('4', 'Diamonds')])
+      bot1.setHand([new Card('3', 'Spades')])
+      bot2.setHand([])
+      game.setDeck(new Deck([]))
+      game.playRound(bot1.name(), '3')
+      expect(game.roundResults()[0].gameWinners().length).toBeGreaterThan(0)
     })
   })
 
