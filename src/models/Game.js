@@ -7,6 +7,8 @@ class Game {
     this._currentPlayer = player
     this._playersWithHighestNumberOfBooks = []
     this._gameWinners = []
+    this._roundResults = []
+    this._roundPlayer = null
   }
 
   players() {
@@ -27,6 +29,14 @@ class Game {
 
   gameWinners() {
     return this._gameWinners
+  }
+
+  roundResults() {
+    return this._roundResults
+  }
+
+  roundPlayer() {
+    return this._roundPlayer
   }
 
   setPlayers(players) {
@@ -60,14 +70,22 @@ class Game {
   }
 
   playRound(opponentName, rank) {
-    if (!(this.currentPlayerHasCards())) return null
-    const opponent = this.setOpponent(opponentName)
+    if (!(this.currentPlayerHasCards())) return
+    
+    var { opponent, cardFished } = this.setVariablesForPlayRound(opponentName)
     if (opponent.handHasRanks(rank)) {
       this.moveCardsFromOpponentToCurrentPlayer(opponent, rank)
     } else {
-      this.handleGoFish(rank)
+      cardFished = this.handleGoFish(rank)
     }
-    this.finalizeTurn()
+    this.finalizeTurn(opponentName, rank, cardFished)
+  }
+
+  setVariablesForPlayRound(opponentName) {
+    this._roundPlayer = this.currentPlayer()
+    let cardFished = null
+    const opponent = this.setOpponent(opponentName)
+    return { opponent, cardFished }
   }
 
   currentPlayerHasCards() {
@@ -78,16 +96,21 @@ class Game {
     return true
   }
   
-  finalizeTurn() {
-    this.currentPlayer().checkForBooks()
+  finalizeTurn(opponentName, rank, cardFished) {
+    const booksMade = this.roundPlayer().checkForBooks()
     this.checkForWinner()
-    if (this.gameWinners().length > 0) return
     this.checkEmptyHandOrDraw()
+    this.createRoundResult(opponentName, rank, cardFished, booksMade)
     while (!this.isItHumanPlayerTurn() && this.currentPlayer().hand().length > 0) this.botTakeTurn()
   }
 
+  createRoundResult(opponentName, rank, cardFished, booksMade) {
+    const roundResult = new RoundResult({playerName: this.roundPlayer().name(), opponentName: opponentName, rankAsked: rank, cardFished: cardFished, booksMade: booksMade, gameWinners: this.gameWinners()})
+    this.roundResults().push(roundResult)
+  }
+
   checkEmptyHandOrDraw() {
-    if (this.players().every(player => player.hand().length > 0)) return
+    if (this.players().every(player => player.hand().length > 0) || this.gameWinners().length > 0) return
 
     this.players().forEach(player => {
       if (player.hand().length === 0) {
@@ -125,6 +148,7 @@ class Game {
     if (card.rank() !== rank) {
       this.switchPlayers()
     }
+    return card
   }
 
   fishForCard() {

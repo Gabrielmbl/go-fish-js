@@ -39,17 +39,34 @@ class Player {
 
   checkForBooks() {
     const rankCounts = this.rankCountMap()
+    let booksMade = []
   
+    this.makeBook(rankCounts, booksMade)
+    return booksMade
+  }
+
+  makeBook(rankCounts, booksMade) {
     Object.keys(rankCounts).forEach(rank => {
       if (rankCounts[rank] === 4) {
         const book = this.hand().filter(card => card.rank() === rank)
         this.addToBooks(new Book(...book))
+        booksMade.push(rank)
         this.removeByRank(rank)
       }
     })
   }
-  
 
+  // chooseRandomRank() {
+  //   const randomIndex = Math.floor(Math.random() * this.hand().length)
+  //   return this.hand()[randomIndex].rank()
+  // }
+
+  // chooseRandomOpponent(players) {
+  //   const opponents = players.filter(player => player !== this)
+  //   const randomIndex = Math.floor(Math.random() * opponents.length)
+  //   return opponents[randomIndex]
+  // }
+  
   rankCountMap() {
     const rankCounts = {}
 

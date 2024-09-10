@@ -87,6 +87,21 @@ class GameView {
     `
   }
 
+  _renderRoundResults() {
+    return `
+    <h2>Round Results</h2>
+      <div class="round-results">
+        <div class="messages">
+          <ul>
+            ${this.game.roundResults().map(result => `
+              <li>${result.displayResult()}</li>
+            `).join('')}
+          </ul>
+        </div>
+      </div>
+    `
+  }
+  
 
   draw(container) {
     container.innerHTML = `
@@ -101,6 +116,7 @@ class GameView {
         </div>
         
         <div class="game-feed">
+          ${this._renderRoundResults()}
           ${this._renderAskForm()}
         </div>
         
