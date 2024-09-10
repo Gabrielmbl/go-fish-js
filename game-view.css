@@ -1,0 +1,18 @@
+.game-view {
+  display: grid;
+  grid-template-columns: 1fr calc(84 * var(--op-size-unit));
+  grid-template-rows: 1fr calc(84 * var(--op-size-unit));
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 100vh;
+  overflow: auto;
+}
+
+.round-results {
+  height: 30vh;
+  overflow: auto;
+}
+
+.messages {
+  overflow: auto;
+}

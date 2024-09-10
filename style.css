@@ -1,0 +1,13 @@
+.full-height {
+  height: 100%;
+}
+
+.login-container {
+  padding: 50px;
+  border-radius: var(--op-radius-medium);
+  box-shadow: var(--op-border-all) var(--op-color-border);
+}
+
+.scrollable {
+  overflow: auto;
+}
