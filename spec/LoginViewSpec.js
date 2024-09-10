@@ -44,8 +44,8 @@ describe('LoginView', () => {
 
     const form = container.querySelector('form')
     const submitButton = form.querySelector('input[type="submit"]')
-    form.querySelector('.name').value = 'gabriel'
-    form.querySelector('.number-of-opponents').value = 2
+    form.querySelector('#player-name').value = 'gabriel'
+    form.querySelector('#number-of-opponents').value = 2
     expect(params).toEqual({})
 
     submitButton.click()
@@ -68,8 +68,8 @@ describe('LoginView', () => {
 
       const form = container.querySelector('form')
       submitButton = form.querySelector('input[type="submit"]')
-      nameInput = form.querySelector('.name')
-      numberOfOpponentsInput = form.querySelector('.number-of-opponents')
+      nameInput = form.querySelector('#player-name')
+      numberOfOpponentsInput = form.querySelector('#number-of-opponents')
     })
     
     

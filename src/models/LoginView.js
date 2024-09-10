@@ -57,6 +57,7 @@ class LoginView {
 
       const name = form.querySelector('#player-name').value
       const opponentCount = form.querySelector('#number-of-opponents').value
+      if (name === '' || opponentCount < 1 || opponentCount > 8) return
       this.onSubmitCallback(name, opponentCount)
     }.bind(this))
   }
