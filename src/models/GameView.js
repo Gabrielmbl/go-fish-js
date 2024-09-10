@@ -1,7 +1,4 @@
 class GameView {
-  // constructor(game) {
-  //   this.game = game
-  // }
   constructor(game, playRoundCallback, endGameCallback) {
     this.game = game
     this.playRoundCallback = playRoundCallback
@@ -24,16 +21,6 @@ class GameView {
         <button class="btn" type="submit">Ask</button>
       </form>
     `
-  }
-
-  _renderSeeResultsButton() {
-    if (this.game.gameWinners().length > 0) {
-      return `
-        <form class="see-results-form">
-          <button class="btn" type="submit">See Results</button>
-        </form>
-      `
-    }
   }
 
   _renderPlayerView() {
@@ -88,31 +75,53 @@ class GameView {
     }
   }
 
-  // TODO: Styling
+  _renderHeader() {
+    return `
+    <div class="app__header">
+      <div class="navbar">
+        <nav class="navbar__content navbar__content--justify-start">
+          <span>Go Fish</span>
+        </nav>
+      </div>
+    </div>
+    `
+  }
 
 
   draw(container) {
     container.innerHTML = `
-      <h1>Go Fish</h1>
-      <h2>Players</h2>
-      ${this._renderAskForm()}
-      ${this._renderSeeResultsButton()}
-      <ul>
-        ${this._renderPlayerView()}
-        ${this._renderBotView()}
-      </ul>
+      ${this._renderHeader()}
+      <div class="game-view">
+      <div class="game-board">
+          <h2>Players</h2>
+          <ul>
+            ${this._renderPlayerView()}
+            ${this._renderBotView()}
+          </ul>
+        </div>
+        
+        <div class="game-feed">
+          ${this._renderAskForm()}
+        </div>
+        
+        <div class="player-hand">
+        </div>
+
+        <div class="player-books">
+        </div>
+      </div>
     `
     this.addEventListeners(container)
+    
+    if (this.game.gameWinners().length > 0) {
+      this.endGameCallback()
+    }
   }
 
   addEventListeners(container) {
     const askForm = container.querySelector('.ask-form')
-    const seeResultsForm = container.querySelector('.see-results-form')
     if (askForm) {
       this.addFormEventListener(askForm, container)
-    }
-    if (seeResultsForm) {
-      this.addResultsEventListeners(seeResultsForm, container)
     }
   }
 
@@ -126,11 +135,4 @@ class GameView {
     }.bind(this))
   }
 
-  addResultsEventListeners(seeResultsForm, container) {
-    seeResultsForm.addEventListener('submit', function (event) {
-      event.preventDefault()
-
-      this.endGameCallback()
-    }.bind(this))
-  }
 }
