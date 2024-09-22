@@ -1,7 +1,7 @@
 class Game {
   static INITIAL_HAND_SIZE = 7
 
-  constructor(player, numberBots = 1, deck = new Deck()) {
+  constructor(player, numberBots = 1, difficulty = 'medium', deck = new Deck()) {
     this._players = [player, ...this.createBots(numberBots)]
     this._deck = deck
     this._currentPlayer = player
@@ -9,6 +9,7 @@ class Game {
     this._gameWinners = []
     this._roundResults = []
     this._roundPlayer = null
+    this._difficulty = difficulty
   }
 
   players() {
@@ -37,6 +38,14 @@ class Game {
 
   roundPlayer() {
     return this._roundPlayer
+  }
+
+  difficulty() {
+    return this._difficulty
+  }
+
+  setDifficulty(difficulty) {
+    this._difficulty = difficulty
   }
 
   setPlayers(players) {
@@ -107,6 +116,7 @@ class Game {
   createRoundResult(opponentName, rank, cardFished, booksMade) {
     const roundResult = new RoundResult({playerName: this.roundPlayer().name(), opponentName: opponentName, rankAsked: rank, cardFished: cardFished, booksMade: booksMade, gameWinners: this.gameWinners()})
     this.roundResults().push(roundResult)
+    this.players().filter(player => player instanceof Bot).forEach(bot => bot.updateMemory(roundResult))
   }
 
   checkEmptyHandOrDraw() {
@@ -158,9 +168,24 @@ class Game {
   }
 
   botTakeTurn() {
+    if (this.difficulty() === 'easy') {
+      this.botTakeTurnEasy()
+    }
+    else if (this.difficulty() === 'medium' || this.difficulty() === 'hard') {
+      this.botTakeTurnFromMemory()
+    }
+  }
+
+  botTakeTurnEasy() {
     const bot = this.currentPlayer()
     const opponent = bot.chooseRandomOpponent(this.players())
     const rank = bot.chooseRandomRank()
+    this.playRound(opponent.name(), rank)
+  }
+
+  botTakeTurnFromMemory() {
+    const bot = this.currentPlayer()
+    const { rank, opponent } = bot.chooseRankAndOpponentFromMemory(this.players(), this.difficulty())
     this.playRound(opponent.name(), rank)
   }
 
@@ -179,9 +204,4 @@ class Game {
     const winners = playersWithHighestNumberOfBooks.filter(player => player.score() === highestBookScore)
     this.gameWinners().push(...winners)
   }
-
-
-  // createRoundResult(roundPlayer = currentPlayer, opponent, cardRank, bookRank, gameWinnerNames) {
-  //   roundResults.push(new RoundResult())
-  // }
 }

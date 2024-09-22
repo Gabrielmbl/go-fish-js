@@ -1,5 +1,5 @@
 class RoundResult {
-  constructor({ playerName, opponentName, rankAsked, cardFished = null, booksMade, gameWinners = [] }) {
+  constructor({ playerName, opponentName, rankAsked, cardFished = null, booksMade = [], gameWinners = [] }) {
     this._playerName = playerName
     this._opponentName = opponentName
     this._rankAsked = rankAsked
@@ -38,7 +38,11 @@ class RoundResult {
 
   describeFishResult() {
     if (this.cardFished()) {
-      return ` and fished a ${this.cardFished().rank()} of ${this.cardFished().suit()}`
+      if (this.cardFished().rank() === this.rankAsked()) {
+        return ` and fished a ${this.cardFished().rank()} of ${this.cardFished().suit()}`
+      } else {
+        return ` and went fishing`
+      }
     } else {
       return ` and took ${this.rankAsked()}s from ${this.opponentName()}`
     }
